@@ -1,0 +1,5 @@
+{
+  "name": "My Site Keeper",
+  "description": "AI 기반 메타데이터 생성으로 즐겨찾는 웹사이트를 저장하고 관리하는 개인 대시보드입니다.",
+  "requestFramePermissions": []
+}
