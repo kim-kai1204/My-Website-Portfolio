@@ -172,7 +172,7 @@ export const Dashboard: React.FC = () => {
   }, [sites, searchQuery]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white font-sans">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/30 font-sans">
       <Header />
 
       <main className="flex-grow container mx-auto px-6 py-12 max-w-7xl">
@@ -182,30 +182,30 @@ export const Dashboard: React.FC = () => {
           {/* Search */}
           <div className="relative w-full md:w-96">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-slate-400" />
+              <Search className="h-4 w-4 text-indigo-400" />
             </div>
             <input
               type="text"
               placeholder="검색..."
-              className="block w-full pl-11 pr-4 py-3 border-0 rounded-lg leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-300 focus:bg-white sm:text-sm transition-all"
+              className="block w-full pl-11 pr-4 py-3 border-0 rounded-xl leading-5 bg-white/80 backdrop-blur-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:bg-white shadow-md shadow-indigo-100/50 sm:text-sm transition-all"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <div className="bg-slate-50 p-1 rounded-lg flex">
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="bg-white/80 backdrop-blur-sm p-1 rounded-xl flex shadow-md shadow-indigo-100/50">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-indigo-600'}`}
                 aria-label="그리드 뷰"
               >
                 <LayoutGrid className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-indigo-600'}`}
                 aria-label="리스트 뷰"
               >
                 <ListIcon className="h-4 w-4" />
@@ -214,7 +214,7 @@ export const Dashboard: React.FC = () => {
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-lg transition-all active:scale-95 w-full md:w-auto font-medium text-sm"
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-xl transition-all active:scale-95 w-full md:w-auto font-semibold text-sm shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40"
             >
               <Plus className="h-4 w-4" />
               <span>추가</span>
@@ -225,17 +225,17 @@ export const Dashboard: React.FC = () => {
         {/* Content Area */}
         {filteredSites.length === 0 ? (
           <div className="text-center py-24">
-            <div className="mx-auto h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-              <Search className="h-6 w-6 text-slate-300" />
+            <div className="mx-auto h-20 w-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-100/50">
+              <Search className="h-8 w-8 text-indigo-400" />
             </div>
-            <h3 className="text-base font-medium text-slate-900 mb-2">사이트를 찾을 수 없습니다</h3>
-            <p className="text-sm text-slate-400 max-w-sm mx-auto break-keep">
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">사이트를 찾을 수 없습니다</h3>
+            <p className="text-sm text-slate-500 max-w-sm mx-auto break-keep">
               {searchQuery ? "검색어를 변경해보세요." : "좋아하는 웹사이트를 추가하여 나만의 컬렉션을 만들어보세요."}
             </p>
             {!searchQuery && (
                <button
                onClick={() => setIsModalOpen(true)}
-               className="mt-8 inline-flex items-center gap-2 text-slate-900 hover:text-slate-700 font-medium text-sm"
+               className="mt-8 inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-500/30 hover:shadow-xl transition-all"
              >
                <Plus className="h-4 w-4" />
                첫 번째 사이트 추가하기
@@ -245,8 +245,8 @@ export const Dashboard: React.FC = () => {
         ) : (
           <div className={
             viewMode === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" 
-              : "flex flex-col gap-2"
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" 
+              : "flex flex-col gap-3"
           }>
             {filteredSites.map((site) => (
               <SiteCard 
@@ -266,8 +266,8 @@ export const Dashboard: React.FC = () => {
         onAdd={handleAddSite}
       />
 
-      <footer className="border-t border-slate-100 bg-white py-8 mt-auto">
-        <div className="container mx-auto px-6 text-center text-slate-400 text-xs">
+      <footer className="border-t border-indigo-100/50 bg-gradient-to-r from-indigo-50/50 via-purple-50/50 to-pink-50/50 backdrop-blur-sm py-8 mt-auto">
+        <div className="container mx-auto px-6 text-center text-slate-500 text-xs font-medium">
           <p>© {new Date().getFullYear()} My Site Keeper</p>
         </div>
       </footer>
