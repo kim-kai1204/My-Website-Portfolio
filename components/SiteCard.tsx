@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ExternalLink, Trash2, Globe, Calendar, Tag, Link as LinkIcon } from 'lucide-react';
 import { Site } from '../types';
 
@@ -9,8 +10,14 @@ interface SiteCardProps {
 }
 
 export const SiteCard: React.FC<SiteCardProps> = ({ site, viewMode, onDelete }) => {
+  const navigate = useNavigate();
+  
   const getFaviconUrl = (url: string) => {
     try {
+      // 상대 경로인 경우 처리
+      if (url.startsWith('/') || url.startsWith('./')) {
+        return '';
+      }
       const domain = new URL(url).hostname;
       return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
     } catch {
@@ -25,10 +32,21 @@ export const SiteCard: React.FC<SiteCardProps> = ({ site, viewMode, onDelete }) 
   });
 
   const hasImage = !!site.imageUrl;
+  const isInternalRoute = site.url.startsWith('/');
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (isInternalRoute) {
+      e.preventDefault();
+      navigate(site.url);
+    }
+  };
 
   if (viewMode === 'list') {
     return (
-      <div className="group bg-white border border-slate-200 hover:border-indigo-300 rounded-xl p-4 flex items-center gap-4 transition-all hover:shadow-md">
+      <div 
+        className={`group bg-white border border-slate-200 hover:border-indigo-300 rounded-xl p-4 flex items-center gap-4 transition-all hover:shadow-md ${isInternalRoute ? 'cursor-pointer' : ''}`}
+        onClick={isInternalRoute ? handleClick : undefined}
+      >
         {/* List View Thumbnail */}
         <div className="flex-shrink-0 h-16 w-16 rounded-lg overflow-hidden border border-slate-100 relative">
           {hasImage ? (
@@ -64,17 +82,23 @@ export const SiteCard: React.FC<SiteCardProps> = ({ site, viewMode, onDelete }) 
         </div>
 
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-             <a
-                href={site.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-slate-400 hover:text-primary hover:bg-indigo-50 rounded-lg transition-colors"
-                title="사이트 방문"
-            >
-                <ExternalLink className="h-4 w-4" />
-            </a>
+             {!isInternalRoute ? (
+               <a
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-slate-400 hover:text-primary hover:bg-indigo-50 rounded-lg transition-colors"
+                  title="사이트 방문"
+                  onClick={(e) => e.stopPropagation()}
+              >
+                  <ExternalLink className="h-4 w-4" />
+              </a>
+             ) : null}
             <button
-                onClick={() => onDelete(site.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(site.id);
+                }}
                 className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                 title="사이트 삭제"
             >
@@ -87,7 +111,10 @@ export const SiteCard: React.FC<SiteCardProps> = ({ site, viewMode, onDelete }) 
 
   // Grid View
   return (
-    <div className="group bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl flex flex-col transition-all hover:shadow-xl hover:-translate-y-1 h-full overflow-hidden relative">
+    <div 
+      className={`group bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl flex flex-col transition-all hover:shadow-xl hover:-translate-y-1 h-full overflow-hidden relative ${isInternalRoute ? 'cursor-pointer' : ''}`}
+      onClick={isInternalRoute ? handleClick : undefined}
+    >
       
       {/* Cover Image Area */}
       <div className="h-40 w-full relative overflow-hidden bg-slate-100">
@@ -119,7 +146,10 @@ export const SiteCard: React.FC<SiteCardProps> = ({ site, viewMode, onDelete }) 
 
         {/* Delete Button Overlay */}
          <button
-            onClick={() => onDelete(site.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(site.id);
+            }}
             className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm text-slate-400 hover:text-red-500 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all hover:scale-105"
             title="삭제"
         >
@@ -142,15 +172,23 @@ export const SiteCard: React.FC<SiteCardProps> = ({ site, viewMode, onDelete }) 
                 {formattedDate}
             </span>
             
-            <a
-                href={site.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-indigo-700 transition-colors"
-            >
+            {isInternalRoute ? (
+              <div className="flex items-center gap-1.5 text-sm font-bold text-primary">
                 방문하기
                 <ExternalLink className="h-3.5 w-3.5" />
-            </a>
+              </div>
+            ) : (
+              <a
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-indigo-700 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+              >
+                  방문하기
+                  <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            )}
         </div>
       </div>
     </div>
