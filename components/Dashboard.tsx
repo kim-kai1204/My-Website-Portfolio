@@ -72,17 +72,41 @@ export const Dashboard: React.FC = () => {
 
   // Load sites from localStorage on mount
   useEffect(() => {
-    // Updated key to v4 (korean version)
-    const savedSites = localStorage.getItem('my_sites_data_v4');
+    // Updated key to v5 (with game integration)
+    const savedSites = localStorage.getItem('my_sites_data_v5');
     if (savedSites) {
       try {
-        setSites(JSON.parse(savedSites));
+        const parsedSites = JSON.parse(savedSites);
+        // 게임이 없으면 추가
+        const hasGame = parsedSites.some((site: Site) => site.id === 'game-1');
+        if (!hasGame) {
+          // 게임을 맨 앞에 추가
+          parsedSites.unshift(DEFAULT_SITES[0]);
+          setSites(parsedSites);
+        } else {
+          setSites(parsedSites);
+        }
       } catch (e) {
         console.error("Failed to parse sites", e);
         setSites(DEFAULT_SITES);
       }
     } else {
-      setSites(DEFAULT_SITES);
+      // 기존 v4 데이터가 있으면 마이그레이션
+      const oldSites = localStorage.getItem('my_sites_data_v4');
+      if (oldSites) {
+        try {
+          const parsedSites = JSON.parse(oldSites);
+          const hasGame = parsedSites.some((site: Site) => site.id === 'game-1');
+          if (!hasGame) {
+            parsedSites.unshift(DEFAULT_SITES[0]);
+          }
+          setSites(parsedSites);
+        } catch (e) {
+          setSites(DEFAULT_SITES);
+        }
+      } else {
+        setSites(DEFAULT_SITES);
+      }
     }
     setLoading(false);
   }, []);
@@ -90,7 +114,7 @@ export const Dashboard: React.FC = () => {
   // Save sites to localStorage whenever they change
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem('my_sites_data_v4', JSON.stringify(sites));
+      localStorage.setItem('my_sites_data_v5', JSON.stringify(sites));
     }
   }, [sites, loading]);
 
