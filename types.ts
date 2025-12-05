@@ -13,3 +13,17 @@ export interface GeneratedMetadata {
   description?: string;
   category?: string;
 }
+
+export enum GameState {
+  IDLE = 'IDLE',
+  WAITING = 'WAITING',
+  READY = 'READY',
+  TOO_EARLY = 'TOO_EARLY',
+  ROUND_RESULT = 'ROUND_RESULT',
+  GAME_OVER = 'GAME_OVER'
+}
+
+export interface ScoreData {
+  round: number;
+  timeMs: number;
+}

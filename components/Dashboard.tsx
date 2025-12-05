@@ -14,6 +14,15 @@ const DEFAULT_SITES: Site[] = [
     description: 'Google AI Studio로 만든 네온 스타일 아케이드 게임입니다. 마우스로 이동하여 적을 피하고 오브를 수집하세요!',
     category: '게임',
     imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800',
+    createdAt: Date.now() + 2000,
+  },
+  {
+    id: 'game-2',
+    title: 'Reaction Blitz',
+    url: '/reaction-blitz',
+    description: '반응속도를 테스트하는 게임입니다. 화면이 초록색으로 변하면 최대한 빨리 클릭하세요! 5라운드 동안의 평균 반응속도를 측정합니다.',
+    category: '게임',
+    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800',
     createdAt: Date.now() + 1000,
   },
   {
@@ -72,16 +81,23 @@ export const Dashboard: React.FC = () => {
 
   // Load sites from localStorage on mount
   useEffect(() => {
-    // Updated key to v5 (with game integration)
-    const savedSites = localStorage.getItem('my_sites_data_v5');
+    // Updated key to v6 (with reaction-blitz integration)
+    const savedSites = localStorage.getItem('my_sites_data_v6');
     if (savedSites) {
       try {
         const parsedSites = JSON.parse(savedSites);
-        // 게임이 없으면 추가
-        const hasGame = parsedSites.some((site: Site) => site.id === 'game-1');
-        if (!hasGame) {
-          // 게임을 맨 앞에 추가
-          parsedSites.unshift(DEFAULT_SITES[0]);
+        // 게임들이 없으면 추가
+        const hasNeonDash = parsedSites.some((site: Site) => site.id === 'game-1');
+        const hasReactionBlitz = parsedSites.some((site: Site) => site.id === 'game-2');
+        
+        if (!hasNeonDash || !hasReactionBlitz) {
+          if (!hasNeonDash) {
+            parsedSites.unshift(DEFAULT_SITES[0]);
+          }
+          if (!hasReactionBlitz) {
+            const insertIndex = hasNeonDash ? 1 : 2;
+            parsedSites.splice(insertIndex, 0, DEFAULT_SITES[1]);
+          }
           setSites(parsedSites);
         } else {
           setSites(parsedSites);
@@ -91,21 +107,39 @@ export const Dashboard: React.FC = () => {
         setSites(DEFAULT_SITES);
       }
     } else {
-      // 기존 v4 데이터가 있으면 마이그레이션
-      const oldSites = localStorage.getItem('my_sites_data_v4');
+      // 기존 v5 데이터가 있으면 마이그레이션
+      const oldSites = localStorage.getItem('my_sites_data_v5');
       if (oldSites) {
         try {
           const parsedSites = JSON.parse(oldSites);
-          const hasGame = parsedSites.some((site: Site) => site.id === 'game-1');
-          if (!hasGame) {
+          const hasNeonDash = parsedSites.some((site: Site) => site.id === 'game-1');
+          const hasReactionBlitz = parsedSites.some((site: Site) => site.id === 'game-2');
+          
+          if (!hasNeonDash) {
             parsedSites.unshift(DEFAULT_SITES[0]);
+          }
+          if (!hasReactionBlitz) {
+            const insertIndex = hasNeonDash ? 1 : 2;
+            parsedSites.splice(insertIndex, 0, DEFAULT_SITES[1]);
           }
           setSites(parsedSites);
         } catch (e) {
           setSites(DEFAULT_SITES);
         }
       } else {
-        setSites(DEFAULT_SITES);
+        // 기존 v4 데이터가 있으면 마이그레이션
+        const oldV4Sites = localStorage.getItem('my_sites_data_v4');
+        if (oldV4Sites) {
+          try {
+            const parsedSites = JSON.parse(oldV4Sites);
+            parsedSites.unshift(DEFAULT_SITES[0], DEFAULT_SITES[1]);
+            setSites(parsedSites);
+          } catch (e) {
+            setSites(DEFAULT_SITES);
+          }
+        } else {
+          setSites(DEFAULT_SITES);
+        }
       }
     }
     setLoading(false);
@@ -114,7 +148,7 @@ export const Dashboard: React.FC = () => {
   // Save sites to localStorage whenever they change
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem('my_sites_data_v5', JSON.stringify(sites));
+      localStorage.setItem('my_sites_data_v6', JSON.stringify(sites));
     }
   }, [sites, loading]);
 
