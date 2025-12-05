@@ -11,18 +11,18 @@ const DEFAULT_SITES: Site[] = [
     id: 'game-1',
     title: 'Neon Dash Arcade',
     url: '/game',
-    description: 'Google AI Studio로 만든 네온 스타일 아케이드 게임입니다. 마우스로 이동하여 적을 피하고 오브를 수집하세요!',
+    description: '네온 스타일 아케이드 게임. 마우스로 이동하여 적을 피하고 오브를 수집하세요.',
     category: '게임',
-    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800',
     createdAt: Date.now() + 2000,
   },
   {
     id: 'game-2',
     title: 'Reaction Blitz',
     url: '/reaction-blitz',
-    description: '반응속도를 테스트하는 게임입니다. 화면이 초록색으로 변하면 최대한 빨리 클릭하세요! 5라운드 동안의 평균 반응속도를 측정합니다.',
+    description: '반응속도 테스트 게임. 화면이 초록색으로 변하면 최대한 빨리 클릭하세요.',
     category: '게임',
-    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
     createdAt: Date.now() + 1000,
   },
   {
@@ -172,70 +172,70 @@ export const Dashboard: React.FC = () => {
   }, [sites, searchQuery]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 font-sans">
+    <div className="min-h-screen flex flex-col bg-white font-sans">
       <Header />
 
-      <main className="flex-grow container mx-auto px-4 py-8 max-w-7xl">
+      <main className="flex-grow container mx-auto px-6 py-12 max-w-7xl">
         {/* Controls Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
           
           {/* Search */}
           <div className="relative w-full md:w-96">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-slate-400" />
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-slate-400" />
             </div>
             <input
               type="text"
-              placeholder="내 컬렉션 검색..."
-              className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm shadow-sm transition-all"
+              placeholder="검색..."
+              className="block w-full pl-11 pr-4 py-3 border-0 rounded-lg leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-300 focus:bg-white sm:text-sm transition-all"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="bg-white p-1 rounded-lg border border-slate-200 flex shadow-sm">
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <div className="bg-slate-50 p-1 rounded-lg flex">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-slate-100 text-primary' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
                 aria-label="그리드 뷰"
               >
-                <LayoutGrid className="h-5 w-5" />
+                <LayoutGrid className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-slate-100 text-primary' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
                 aria-label="리스트 뷰"
               >
-                <ListIcon className="h-5 w-5" />
+                <ListIcon className="h-4 w-4" />
               </button>
             </div>
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center gap-2 bg-primary hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95 w-full md:w-auto"
+              className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-lg transition-all active:scale-95 w-full md:w-auto font-medium text-sm"
             >
-              <Plus className="h-5 w-5" />
-              <span className="font-medium">사이트 추가</span>
+              <Plus className="h-4 w-4" />
+              <span>추가</span>
             </button>
           </div>
         </div>
 
         {/* Content Area */}
         {filteredSites.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-100">
-            <div className="mx-auto h-24 w-24 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-              <Search className="h-10 w-10 text-slate-300" />
+          <div className="text-center py-24">
+            <div className="mx-auto h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+              <Search className="h-6 w-6 text-slate-300" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900">사이트를 찾을 수 없습니다</h3>
-            <p className="text-slate-500 mt-1 max-w-sm mx-auto break-keep">
+            <h3 className="text-base font-medium text-slate-900 mb-2">사이트를 찾을 수 없습니다</h3>
+            <p className="text-sm text-slate-400 max-w-sm mx-auto break-keep">
               {searchQuery ? "검색어를 변경해보세요." : "좋아하는 웹사이트를 추가하여 나만의 컬렉션을 만들어보세요."}
             </p>
             {!searchQuery && (
                <button
                onClick={() => setIsModalOpen(true)}
-               className="mt-6 inline-flex items-center gap-2 text-primary hover:text-indigo-700 font-medium"
+               className="mt-8 inline-flex items-center gap-2 text-slate-900 hover:text-slate-700 font-medium text-sm"
              >
                <Plus className="h-4 w-4" />
                첫 번째 사이트 추가하기
@@ -245,8 +245,8 @@ export const Dashboard: React.FC = () => {
         ) : (
           <div className={
             viewMode === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" 
-              : "flex flex-col gap-3"
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" 
+              : "flex flex-col gap-2"
           }>
             {filteredSites.map((site) => (
               <SiteCard 
@@ -266,9 +266,9 @@ export const Dashboard: React.FC = () => {
         onAdd={handleAddSite}
       />
 
-      <footer className="border-t border-slate-200 bg-white py-6 mt-auto">
-        <div className="container mx-auto px-4 text-center text-slate-500 text-sm">
-          <p>© {new Date().getFullYear()} My Site Keeper. Built with React & Gemini.</p>
+      <footer className="border-t border-slate-100 bg-white py-8 mt-auto">
+        <div className="container mx-auto px-6 text-center text-slate-400 text-xs">
+          <p>© {new Date().getFullYear()} My Site Keeper</p>
         </div>
       </footer>
     </div>

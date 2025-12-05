@@ -17,21 +17,21 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-7xl">
+    <header className="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-20">
+      <div className="container mx-auto px-6 h-20 flex items-center justify-between max-w-7xl">
         <div 
-          className={`flex items-center gap-2.5 ${!isHomePage ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+          className={`flex items-center gap-3 ${!isHomePage ? 'cursor-pointer hover:opacity-70 transition-opacity' : ''}`}
           onClick={handleLogoClick}
         >
-          <div className="bg-indigo-100 p-2 rounded-lg">
-            <Bookmark className="h-6 w-6 text-primary" />
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center">
+            <Bookmark className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">My Site Keeper</h1>
+            <h1 className="text-lg font-semibold text-slate-900 tracking-tight">My Site Keeper</h1>
           </div>
         </div>
-        <div className="hidden md:flex items-center text-sm text-slate-500">
-          <span>나만의 웹 컬렉션을 완성해보세요</span>
+        <div className="hidden md:flex items-center text-xs text-slate-400 font-light tracking-wide">
+          <span>나만의 웹 컬렉션</span>
         </div>
       </div>
     </header>
