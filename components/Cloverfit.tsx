@@ -1,34 +1,27 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Header } from './Header';
 
 export const Cloverfit: React.FC = () => {
-  const navigate = useNavigate();
+  const baseUrl = import.meta.env.BASE_URL;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
-      <header className="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
-          <button
-            onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-slate-800 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span className="text-sm font-medium">대시보드로 돌아가기</span>
-          </button>
-          <span className="text-xs text-slate-400">Cloverfit Hack Simulation</span>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/30 font-sans">
+      <Header />
 
       <main className="flex-1">
         <iframe
           title="Cloverfit Hack Simulation"
-          src="/cloverfit/index.html"
-          className="w-full h-[calc(100vh-4rem)] border-0"
+          src={`${baseUrl}cloverfit/index.html`}
+          className="w-full h-full border-0"
           sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups allow-forms"
         />
       </main>
+
+      <footer className="border-t border-indigo-100/50 bg-gradient-to-r from-indigo-50/50 via-purple-50/50 to-pink-50/50 backdrop-blur-sm py-8 mt-auto">
+        <div className="container mx-auto px-6 text-center text-slate-500 text-xs font-medium">
+          <p>© {new Date().getFullYear()} My Site Keeper</p>
+        </div>
+      </footer>
     </div>
   );
 };
-
