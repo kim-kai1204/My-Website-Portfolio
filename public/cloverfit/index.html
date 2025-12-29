@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CloverFit Hack Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+      
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #000;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      /* Custom Scrollbar for Terminal */
+      
+      .terminal-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      .terminal-scrollbar::-webkit-scrollbar-track {
+        background: #000;
+      }
+      
+      .terminal-scrollbar::-webkit-scrollbar-thumb {
+        background: #0f0;
+        border-radius: 4px;
+      }
+      
+      /* Glitch Animations */
+      
+      @keyframes glitch-skew {
+        0% { transform: skew(0deg); }
+        20% { transform: skew(-10deg); }
+        40% { transform: skew(10deg); }
+        60% { transform: skew(-5deg); }
+        80% { transform: skew(5deg); }
+        100% { transform: skew(0deg); }
+      }
+      
+      .animate-glitch-skew {
+        animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+      }
+      
+      @keyframes noise {
+        0% { clip-path: inset(40% 0 61% 0); }
+        20% { clip-path: inset(92% 0 1% 0); }
+        40% { clip-path: inset(43% 0 1% 0); }
+        60% { clip-path: inset(25% 0 58% 0); }
+        80% { clip-path: inset(54% 0 7% 0); }
+        100% { clip-path: inset(58% 0 43% 0); }
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-CVW-BRaD.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+</body>
+</html>

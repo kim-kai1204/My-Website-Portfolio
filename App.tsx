@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Dashboard } from './components/Dashboard';
 import { Game } from './components/Game';
 import { ReactionBlitz } from './components/ReactionBlitz';
+import { Cloverfit } from './components/Cloverfit';
 
 const App: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const App: React.FC = () => {
       <Route path="/" element={<Dashboard />} />
       <Route path="/game" element={<Game />} />
       <Route path="/reaction-blitz" element={<ReactionBlitz />} />
+      <Route path="/cloverfit" element={<Cloverfit />} />
     </Routes>
   );
 };

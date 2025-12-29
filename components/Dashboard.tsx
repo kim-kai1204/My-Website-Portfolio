@@ -5,8 +5,19 @@ import { SiteCard } from './SiteCard';
 import { AddSiteModal } from './AddSiteModal';
 import { Site } from '../types';
 
+const STORAGE_KEY = 'my_sites_data_v7';
+
 // Default sites data matching the user's requested categories with images
 const DEFAULT_SITES: Site[] = [
+  {
+    id: 'game-3',
+    title: 'Cloverfit Hack Simulation',
+    url: '/cloverfit',
+    description: 'AI Studio로 만든 해킹 시뮬레이션. 파일을 열어 단계를 진행해보세요.',
+    category: '게임',
+    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800',
+    createdAt: Date.now() + 3000,
+  },
   {
     id: 'game-1',
     title: 'Neon Dash Arcade',
@@ -72,6 +83,13 @@ const DEFAULT_SITES: Site[] = [
   },
 ];
 
+const ensureGameEntries = (sites: Site[]) => {
+  const existingIds = new Set(sites.map((s) => s.id));
+  const missing = DEFAULT_SITES.filter((s) => s.id.startsWith('game-') && !existingIds.has(s.id));
+  if (missing.length === 0) return sites;
+  return [...missing, ...sites];
+};
+
 export const Dashboard: React.FC = () => {
   const [sites, setSites] = useState<Site[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,66 +99,31 @@ export const Dashboard: React.FC = () => {
 
   // Load sites from localStorage on mount
   useEffect(() => {
-    // Updated key to v6 (with reaction-blitz integration)
-    const savedSites = localStorage.getItem('my_sites_data_v6');
+    const savedSites = localStorage.getItem(STORAGE_KEY);
     if (savedSites) {
       try {
         const parsedSites = JSON.parse(savedSites);
-        // 게임들이 없으면 추가
-        const hasNeonDash = parsedSites.some((site: Site) => site.id === 'game-1');
-        const hasReactionBlitz = parsedSites.some((site: Site) => site.id === 'game-2');
-        
-        if (!hasNeonDash || !hasReactionBlitz) {
-          if (!hasNeonDash) {
-            parsedSites.unshift(DEFAULT_SITES[0]);
-          }
-          if (!hasReactionBlitz) {
-            const insertIndex = hasNeonDash ? 1 : 2;
-            parsedSites.splice(insertIndex, 0, DEFAULT_SITES[1]);
-          }
-          setSites(parsedSites);
-        } else {
-          setSites(parsedSites);
-        }
+        setSites(ensureGameEntries(parsedSites));
       } catch (e) {
-        console.error("Failed to parse sites", e);
+        console.error('Failed to parse sites', e);
         setSites(DEFAULT_SITES);
       }
     } else {
-      // 기존 v5 데이터가 있으면 마이그레이션
-      const oldSites = localStorage.getItem('my_sites_data_v5');
-      if (oldSites) {
-        try {
-          const parsedSites = JSON.parse(oldSites);
-          const hasNeonDash = parsedSites.some((site: Site) => site.id === 'game-1');
-          const hasReactionBlitz = parsedSites.some((site: Site) => site.id === 'game-2');
-          
-          if (!hasNeonDash) {
-            parsedSites.unshift(DEFAULT_SITES[0]);
-          }
-          if (!hasReactionBlitz) {
-            const insertIndex = hasNeonDash ? 1 : 2;
-            parsedSites.splice(insertIndex, 0, DEFAULT_SITES[1]);
-          }
-          setSites(parsedSites);
-        } catch (e) {
-          setSites(DEFAULT_SITES);
-        }
-      } else {
-        // 기존 v4 데이터가 있으면 마이그레이션
-        const oldV4Sites = localStorage.getItem('my_sites_data_v4');
-        if (oldV4Sites) {
+      // migrate from older keys
+      const oldKeys = ['my_sites_data_v6', 'my_sites_data_v5', 'my_sites_data_v4'];
+      let migrated: Site[] | null = null;
+      for (const key of oldKeys) {
+        const data = localStorage.getItem(key);
+        if (data) {
           try {
-            const parsedSites = JSON.parse(oldV4Sites);
-            parsedSites.unshift(DEFAULT_SITES[0], DEFAULT_SITES[1]);
-            setSites(parsedSites);
+            migrated = ensureGameEntries(JSON.parse(data));
+            break;
           } catch (e) {
-            setSites(DEFAULT_SITES);
+            console.error('Migration parse error', e);
           }
-        } else {
-          setSites(DEFAULT_SITES);
         }
       }
+      setSites(migrated ?? DEFAULT_SITES);
     }
     setLoading(false);
   }, []);
@@ -148,7 +131,7 @@ export const Dashboard: React.FC = () => {
   // Save sites to localStorage whenever they change
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem('my_sites_data_v6', JSON.stringify(sites));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sites));
     }
   }, [sites, loading]);
 
@@ -230,7 +213,7 @@ export const Dashboard: React.FC = () => {
             </div>
             <h3 className="text-lg font-semibold text-slate-900 mb-2">사이트를 찾을 수 없습니다</h3>
             <p className="text-sm text-slate-500 max-w-sm mx-auto break-keep">
-              {searchQuery ? "검색어를 변경해보세요." : "좋아하는 웹사이트를 추가하여 나만의 컬렉션을 만들어보세요."}
+              {searchQuery ? '검색어를 변경해보세요.' : '좋아하는 웹사이트를 추가하여 나만의 컬렉션을 만들어보세요.'}
             </p>
             {!searchQuery && (
                <button
@@ -245,8 +228,8 @@ export const Dashboard: React.FC = () => {
         ) : (
           <div className={
             viewMode === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" 
-              : "flex flex-col gap-3"
+              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5' 
+              : 'flex flex-col gap-3'
           }>
             {filteredSites.map((site) => (
               <SiteCard 
@@ -274,4 +257,3 @@ export const Dashboard: React.FC = () => {
     </div>
   );
 };
-
