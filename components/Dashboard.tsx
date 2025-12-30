@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Plus, Search, LayoutGrid, List as ListIcon } from 'lucide-react';
 import { Header } from './Header';
+import { Footer } from './Footer';
 import { SiteCard } from './SiteCard';
 import { AddSiteModal } from './AddSiteModal';
 import { Site } from '../types';
@@ -249,11 +250,7 @@ export const Dashboard: React.FC = () => {
         onAdd={handleAddSite}
       />
 
-      <footer className="border-t border-indigo-100/50 bg-gradient-to-r from-indigo-50/50 via-purple-50/50 to-pink-50/50 backdrop-blur-sm py-8 mt-auto">
-        <div className="container mx-auto px-6 text-center text-slate-500 text-xs font-medium">
-          <p>© {new Date().getFullYear()} My Site Keeper</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
