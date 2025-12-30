@@ -12,7 +12,7 @@ export const Cloverfit: React.FC = () => {
         <iframe
           title="Cloverfit Hack Simulation"
           src={`${baseUrl}cloverfit/index.html`}
-          className="w-full h-full border-0"
+          className="w-full h-[calc(100vh-9rem)] border-0"
           sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups allow-forms"
         />
       </main>
