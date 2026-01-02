@@ -8,7 +8,7 @@ import { Site } from '../types';
 
 const STORAGE_KEY = 'my_sites_data_v7';
 
-// Default sites data matching the user's requested categories with images
+// Keep only the three requested game cards.
 const DEFAULT_SITES: Site[] = [
   {
     id: 'game-3',
@@ -37,58 +37,15 @@ const DEFAULT_SITES: Site[] = [
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
     createdAt: Date.now() + 1000,
   },
-  {
-    id: '1',
-    title: '픽셀 퀘스트 아레나',
-    url: 'https://www.pixelquest-demo-game.com',
-    description: '브라우저에서 바로 즐기는 레트로 스타일 MMORPG. 드래곤을 사냥하고 길드에 가입하세요.',
-    category: '게임',
-    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800',
-    createdAt: Date.now(),
-  },
-  {
-    id: '2',
-    title: '캔버스 프로 온라인',
-    url: 'https://www.canvaspro-online-demo.com',
-    description: '웹 기반 디지털 드로잉 도구로 창의력을 발휘하고 커뮤니티 아트 챌린지에 참여해보세요.',
-    category: '그림 그리기',
-    imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800',
-    createdAt: Date.now() - 1000,
-  },
-  {
-    id: '3',
-    title: '18번 홀 골프',
-    url: 'https://www.the18thhole-demo.com',
-    description: '매일 업데이트되는 골프 뉴스, 스윙 분석 팁, 그리고 가상 코스 투어를 제공합니다.',
-    category: '골프',
-    imageUrl: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&q=80&w=800',
-    createdAt: Date.now() - 2000,
-  },
-  {
-    id: '4',
-    title: '젠(Zen) 낮잠 스테이션',
-    url: 'https://www.zennapstation-demo.com',
-    description: '효과적인 파워 낮잠을 위한 엄선된 백색 소음과 명상 가이드를 들어보세요.',
-    category: '낮잠',
-    imageUrl: 'https://images.unsplash.com/photo-1511295742362-92c96b1cf484?auto=format&fit=crop&q=80&w=800',
-    createdAt: Date.now() - 3000,
-  },
-  {
-    id: '5',
-    title: '데스크 셋업 위클리',
-    url: 'https://www.desksetups-inspo.com',
-    description: '미니멀한 작업 공간 영감, 가젯 리뷰, 홈 오피스 정리 가이드를 확인하세요.',
-    category: '데스크테리어',
-    imageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800',
-    createdAt: Date.now() - 4000,
-  },
 ];
 
-const ensureGameEntries = (sites: Site[]) => {
-  const existingIds = new Set(sites.map((s) => s.id));
-  const missing = DEFAULT_SITES.filter((s) => s.id.startsWith('game-') && !existingIds.has(s.id));
-  if (missing.length === 0) return sites;
-  return [...missing, ...sites];
+const normalizeSites = (sites: Site[]) => {
+  const allowedIds = new Set(DEFAULT_SITES.map((site) => site.id));
+  const filtered = sites.filter((site) => allowedIds.has(site.id));
+  const existingIds = new Set(filtered.map((s) => s.id));
+  const missing = DEFAULT_SITES.filter((s) => !existingIds.has(s.id));
+  if (missing.length === 0) return filtered;
+  return [...missing, ...filtered];
 };
 
 export const Dashboard: React.FC = () => {
@@ -104,7 +61,7 @@ export const Dashboard: React.FC = () => {
     if (savedSites) {
       try {
         const parsedSites = JSON.parse(savedSites);
-        setSites(ensureGameEntries(parsedSites));
+        setSites(normalizeSites(parsedSites));
       } catch (e) {
         console.error('Failed to parse sites', e);
         setSites(DEFAULT_SITES);
@@ -117,7 +74,7 @@ export const Dashboard: React.FC = () => {
         const data = localStorage.getItem(key);
         if (data) {
           try {
-            migrated = ensureGameEntries(JSON.parse(data));
+            migrated = normalizeSites(JSON.parse(data));
             break;
           } catch (e) {
             console.error('Migration parse error', e);
