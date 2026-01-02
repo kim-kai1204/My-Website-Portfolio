@@ -8,8 +8,17 @@ import { Site } from '../types';
 
 const STORAGE_KEY = 'my_sites_data_v7';
 
-// Keep only the three requested game cards.
+// Keep only the requested internal apps.
 const DEFAULT_SITES: Site[] = [
+  {
+    id: 'ai-1',
+    title: 'Gemini Multi-Tool AI Studio',
+    url: '/gemini',
+    description: '대화, 이미지 분석, 텍스트 인사이트까지 한 번에 사용하는 AI 멀티툴.',
+    category: 'AI',
+    imageUrl: 'https://images.unsplash.com/photo-1516110833967-5787c5c774d1?auto=format&fit=crop&q=80&w=800',
+    createdAt: Date.now() + 4000,
+  },
   {
     id: 'game-3',
     title: 'Cloverfit Hack Simulation',
