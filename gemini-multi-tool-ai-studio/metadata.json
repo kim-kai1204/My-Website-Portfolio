@@ -1,0 +1,7 @@
+{
+  "name": "Gemini Multi-Tool AI Studio",
+  "description": "A comprehensive AI workstation featuring an advanced chatbot, image analysis with vision, and data-driven text summarization using the Gemini API.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
